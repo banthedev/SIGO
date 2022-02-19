@@ -7,11 +7,16 @@ import (
 )
 
 func main() {
+	// weatherAPI()
+	commands()
+}
+
+func commands() {
 	// Our command name
 	getCmd := flag.NewFlagSet("get", flag.ExitOnError)
 
 	// Returns wheather or not you should go outside
-	getCityWeather := getCmd.String("city", "", "Desc: Name of your city")
+	getCityWeather := getCmd.String("city", "", "Desc: 'city' is the name of your city")
 
 	if len(os.Args) < 2 {
 		fmt.Println("expected 'get' or 'add' subcommands")
@@ -30,24 +35,19 @@ func HandleGet(getCmd *flag.FlagSet, cityweather *string) {
 	getCmd.Parse(os.Args[2:])
 
 	if *cityweather == "" {
-		fmt.Print("city is required")
+		fmt.Print("city name is required, use ")
 		getCmd.PrintDefaults()
 		os.Exit(1)
 	}
-
+	// Pass string into function, add to API call
 	if *cityweather != "" {
-		locations := getWeather()
-		cityweather := *cityweather
-		for _, location := range locations {
-
-			/// Check temperature (in degrees fehrenheit)
-			var sigo, note = checkTemp(location.Temperature)
-
-			if cityweather == location.City {
-				fmt.Printf("\nCity \t Temperature \t SIGO?\n")
-				fmt.Printf("%v \t %v \t %v \n", location.City, location.Temperature, sigo)
-				fmt.Printf("Note: %v \n\n", note)
-			}
+		weatherObject := getWeather(*cityweather)
+		var sigo, note = checkTemp(int(weatherObject.Current.TempF))
+		/// Check if cityWeather object is the same as the city
+		if *cityweather == weatherObject.Location.Name {
+			fmt.Printf("\nCity \t Temperature \t SIGO?\n")
+			fmt.Printf("%v \t %v \t %v \n", weatherObject.Location.Name, weatherObject.Current.TempF, sigo)
+			fmt.Printf("Note: %v \n\n", note)
 		}
 	}
 }
