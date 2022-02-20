@@ -1,0 +1,3 @@
+# Ignore APIKEY.txt
+*.o
+APIKEY.txt

@@ -30,8 +30,13 @@ type Weather struct {
 }
 
 func getWeather(cityI string) (Weathers Weather) {
-	api_link := "https://api.weatherapi.com/v1/current.json?key=11deda6f63cb4508825230750221802&q="
-	full_link := api_link + cityI + "&aqi=yes"
+	fileReadApiKey, fileErr := os.ReadFile("APIKEY.txt")
+	if fileErr != nil {
+		log.Fatal(fileErr)
+	}
+	api_link := "https://api.weatherapi.com/v1/current.json?key="
+
+	full_link := api_link + string(fileReadApiKey) + "&q=" + cityI + "&aqi=yes"
 	response, err := http.Get(full_link)
 	if err != nil {
 		fmt.Print(err.Error())
