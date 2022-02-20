@@ -43,11 +43,12 @@ func HandleGet(getCmd *flag.FlagSet, cityweather *string) {
 	if *cityweather != "" {
 		weatherObject := getWeather(*cityweather)
 		var sigo, note = checkTemp(int(weatherObject.Current.TempF))
+
 		/// Check if cityWeather object is the same as the city
 		if *cityweather == weatherObject.Location.Name {
-			fmt.Printf("\nCity \t Temperature \t SIGO?\n")
+			fmt.Printf("\nCity \t Temp \t SIGO? \n")
 			fmt.Printf("%v \t %v \t %v \n", weatherObject.Location.Name, weatherObject.Current.TempF, sigo)
-			fmt.Printf("Note: %v \n\n", note)
+			fmt.Printf("\nNote: %v \n\n", note)
 		}
 	}
 }
@@ -58,8 +59,10 @@ func checkTemp(temp int) (sigo string, noteO string) {
 		return "NO", "Stay in your house if you want to survive"
 	} else if temp < 20 {
 		return "Noooo", "You're going to freeze to death!"
-	} else if temp < 35 {
+	} else if temp < 30 {
 		return "No", "You should put on a scarf"
+	} else if temp < 40 {
+		return "Maybe", "It's cold, but if you want to then go for it"
 	} else if temp < 50 {
 		return "Yes", "Make sure to wear some long clothing"
 	} else if temp < 65 {

@@ -1,3 +1,5 @@
 # Ignore APIKEY.txt
-*.o
 APIKEY.txt
+
+# Ignore Go binary
+sigo
