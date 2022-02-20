@@ -1,3 +1,4 @@
+[![Go Test](https://github.com/bryanmontalvan/sigo/actions/workflows/go-build-tests.yml/badge.svg)](https://github.com/bryanmontalvan/sigo/actions/workflows/go-build-tests.yml)
 # Should I Go Out (SIGO)?
 
 Programmers tend to not go out often simply because we're too busy trying to push a new feature to our side projects,
