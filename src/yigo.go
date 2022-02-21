@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -39,8 +40,7 @@ func getWeather(cityI string) (Weathers Weather) {
 	full_link := api_link + string(fileReadApiKey) + "&q=" + cityI + "&aqi=yes"
 	response, err := http.Get(full_link)
 	if err != nil {
-		fmt.Print(err.Error())
-		os.Exit(1)
+		log.Fatal(err)
 	}
 
 	responseData, err := ioutil.ReadAll(response.Body)
@@ -55,4 +55,11 @@ func getWeather(cityI string) (Weathers Weather) {
 	}
 
 	return responseObject
+}
+
+func WriteToFile(addCmd *flag.FlagSet, cityweather *string) {
+	err := ioutil.WriteFile("storedcity.txt", []byte(*cityweather), 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
