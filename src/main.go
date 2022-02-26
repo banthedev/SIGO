@@ -35,7 +35,7 @@ func commands() {
 	case "add":
 		HandleAdd(addCmd, addCityWeather)
 	case "saved":
-		HandleSavedGet()
+		HandleSaved()
 	default:
 		fmt.Println("You've inputted an invalid command")
 	}
@@ -53,13 +53,7 @@ func HandleGet(getCmd *flag.FlagSet, cityweather *string) {
 	if *cityweather != "" {
 		weatherObject := getWeather(*cityweather)
 		var sigo, note = checkTemp(int(weatherObject.Current.TempF))
-
-		/// Check if cityWeather object is the same as the city
-		if *cityweather == weatherObject.Location.Name {
-			fmt.Printf("\nCity \t Temp \t SIGO? \n")
-			fmt.Printf("%v \t %v \t %v \n", weatherObject.Location.Name, weatherObject.Current.TempF, sigo)
-			fmt.Printf("\nNote: %v \n\n", note)
-		}
+		printWeather(weatherObject, sigo, note)
 	}
 }
 
@@ -87,49 +81,19 @@ func HandleAdd(addCmd *flag.FlagSet, cityweather *string) {
 	fmt.Printf("\n%v was stored as your saved city\n\n", *cityweather)
 }
 
-func HandleSavedGet() {
+func HandleSaved() {
 	// Read from file
 	fileReadCity, fileErr := os.ReadFile("storedcity.txt")
 	if fileErr != nil {
 		log.Fatal(fileErr)
 	}
 	zipweather := string(fileReadCity)
-	// (This is temporary), Fetch data
+
+	// Check if inputted string is not null
 	if zipweather != "" {
 		weatherObject := getWeather(zipweather)
 		var sigo, note = checkTemp(int(weatherObject.Current.TempF))
 
-		/// Check if cityWeather object is the same as the city
-		if zipweather == weatherObject.Location.Name {
-			fmt.Printf("\nCity \t Temp \t SIGO? \n")
-			fmt.Printf("%v \t %v \t %v \n", weatherObject.Location.Name, weatherObject.Current.TempF, sigo)
-			fmt.Printf("\nNote: %v \n\n", note)
-		}
+		printWeather(weatherObject, sigo, note)
 	}
-}
-
-// Takes in location Object, returns string
-func checkTemp(temp int) (sigo string, noteO string) {
-	if temp < 10 {
-		return "NO", "Stay in your house if you want to survive"
-	} else if temp < 20 {
-		return "Noooo", "You're going to freeze to death!"
-	} else if temp < 30 {
-		return "No", "You should put on a scarf"
-	} else if temp < 40 {
-		return "Maybe", "It's cold, but if you want to then go for it"
-	} else if temp < 50 {
-		return "Yes", "Make sure to wear some long clothing"
-	} else if temp < 65 {
-		return "Yes", "Enjoy the chill weather ;)"
-	} else if temp <= 80 {
-		return "Yes", "It's nice out, go out there :)"
-	} else if temp <= 90 {
-		return "Yes", "Beach weather, go get that tan!"
-	} else if temp <= 96 {
-		return "No", "It's very hot, up to you if you would like to get sweaty"
-	} else if temp <= 105 {
-		return "NOO", "Our planet will try up soon, do not go outside!"
-	}
-	return "maybe", "eh"
 }
