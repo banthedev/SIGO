@@ -31,7 +31,7 @@ type Weather struct {
 }
 
 func getWeather(cityI string) (Weathers Weather) {
-	fileReadApiKey, fileErr := os.ReadFile("APIKEY.txt")
+	fileReadApiKey, fileErr := os.ReadFile("store/APIKEY.txt")
 	if fileErr != nil {
 		log.Fatal(fileErr)
 	}
@@ -63,13 +63,12 @@ func printWeather(Weathers Weather, sigo string, note string) {
 }
 
 func WriteToFile(addCmd *flag.FlagSet, cityweather *string) {
-	err := ioutil.WriteFile("storedcity.txt", []byte(*cityweather), 0644)
+	err := ioutil.WriteFile("store/storedcity.txt", []byte(*cityweather), 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-// Takes in location Object, returns string
 func checkTemp(temp int) (sigo string, noteO string) {
 	if temp < 10 {
 		return "NO", "Stay in your house if you want to survive"
