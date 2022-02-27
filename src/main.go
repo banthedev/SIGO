@@ -12,18 +12,18 @@ func main() {
 }
 
 func commands() {
-	// get command flag, gets temperature data based on inputted city
+	// Get commands
 	getCmd := flag.NewFlagSet("get", flag.ExitOnError)
-	getCityWeather := getCmd.String("city", "", "Desc: 'get city' will show inputted city")
+	getCityWeather := getCmd.String("city", "", "Desc: 'get city' will display inputted city")
 
-	// add command flag, saves inputted city into file
+	// Add commands
 	addCmd := flag.NewFlagSet("add", flag.ExitOnError)
-	addCityWeather := addCmd.String("city", "", "Desc: 'add city' will store your city (Enter zip-code)")
+	addCityWeather := addCmd.String("city", "", "Desc: 'add city' will store your city")
 
-	// saved command, returns saved city
+	// Saved command
 	flag.NewFlagSet("saved", flag.ExitOnError)
 
-	// Checks to see if
+	// Checks to see if a subcommand was inputted
 	if len(os.Args) < 2 {
 		fmt.Println("expected 'get' or 'add' subcommands")
 		os.Exit(1)
@@ -37,11 +37,16 @@ func commands() {
 	case "saved":
 		HandleSaved()
 	default:
-		fmt.Println("You've inputted an invalid command")
+		fmt.Println("\nYou've inputted an invalid command")
+		fmt.Printf("Command \t Description \n")
+		fmt.Printf("add     \t displays inputted city \n")
+		fmt.Printf("get     \t stores inputted city into local-save \n")
+		fmt.Printf("saved   \t displays stored city \n\n")
 	}
 }
 
 func HandleGet(getCmd *flag.FlagSet, cityweather *string) {
+	// Skips the first value(get), reads "-city"
 	getCmd.Parse(os.Args[2:])
 
 	if *cityweather == "" {
@@ -51,7 +56,9 @@ func HandleGet(getCmd *flag.FlagSet, cityweather *string) {
 	}
 	// Pass string into function, add to API call cityweather
 	if *cityweather != "" {
+		// Extract Weather object as weatherObject
 		weatherObject := getWeather(*cityweather)
+		// Determines SIGO and paired note
 		var sigo, note = checkTemp(int(weatherObject.Current.TempF))
 		printWeather(weatherObject, sigo, note)
 	}
@@ -65,28 +72,28 @@ func HandleAdd(addCmd *flag.FlagSet, cityweather *string) {
 		addCmd.PrintDefaults()
 		os.Exit(1)
 	}
-	// Store file values in variable
+	// Stores string from file in variable
 	fileReadCity, fileErr := os.ReadFile("store/storedcity.txt")
 	if fileErr != nil {
 		log.Fatal(fileErr)
 	}
-	// Check if file is not empty, if its not delete contents and continue
+	// Check if file is not empty, if it has content then wipe it
 	if string(fileReadCity) != "" {
 		if err := os.Truncate("store/storedcity.txt", 0); err != nil {
 			log.Printf("Failed to truncate: %v\n", err)
 		}
 	}
-	// Calls pure function, which writes city to file
+	// Calls write function to store new location
 	WriteToFile(addCmd, cityweather)
 	fmt.Printf("\n%v was stored as your saved city\n\n", *cityweather)
 }
 
 func HandleSaved() {
-	// Read from file
 	fileReadCity, fileErr := os.ReadFile("store/storedcity.txt")
 	if fileErr != nil {
 		log.Fatal(fileErr)
 	}
+	// Stores city name/zip
 	zipweather := string(fileReadCity)
 
 	// Check if inputted string is not null
