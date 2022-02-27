@@ -66,13 +66,13 @@ func HandleAdd(addCmd *flag.FlagSet, cityweather *string) {
 		os.Exit(1)
 	}
 	// Store file values in variable
-	fileReadCity, fileErr := os.ReadFile("storedcity.txt")
+	fileReadCity, fileErr := os.ReadFile("store/storedcity.txt")
 	if fileErr != nil {
 		log.Fatal(fileErr)
 	}
 	// Check if file is not empty, if its not delete contents and continue
 	if string(fileReadCity) != "" {
-		if err := os.Truncate("storedcity.txt", 0); err != nil {
+		if err := os.Truncate("store/storedcity.txt", 0); err != nil {
 			log.Printf("Failed to truncate: %v\n", err)
 		}
 	}
@@ -83,7 +83,7 @@ func HandleAdd(addCmd *flag.FlagSet, cityweather *string) {
 
 func HandleSaved() {
 	// Read from file
-	fileReadCity, fileErr := os.ReadFile("storedcity.txt")
+	fileReadCity, fileErr := os.ReadFile("store/storedcity.txt")
 	if fileErr != nil {
 		log.Fatal(fileErr)
 	}
