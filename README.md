@@ -45,6 +45,10 @@ Now check to see if Go has been installed correctly
 ```go
 go version
 ```
+## Add your own API key
+Head over to [Weather API](https://www.weatherapi.com/) and create an account so you can retrieve your API key.
+Now head over to the `src/store/` folder, here create a text file called `APIKEY.txt` and store your API key within that file
+
 # Getting Started
 In order to use the SIGO CLI you must move into the src folder `cd src`. There you have 3 main commands which all require a `./sigo` prefix
 
