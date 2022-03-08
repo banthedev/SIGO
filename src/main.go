@@ -8,10 +8,6 @@ import (
 )
 
 func main() {
-	commands()
-}
-
-func commands() {
 	// Get commands
 	getCmd := flag.NewFlagSet("get", flag.ExitOnError)
 	getCityWeather := getCmd.String("city", "", "Desc: 'get city' will display inputted city")
