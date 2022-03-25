@@ -7,19 +7,25 @@ import (
 	"os"
 )
 
+/**
+	Title:	Main Function
+
+	Description: This is the main driving function
+
+	Features:
+	- Creates flags(get, add,saved) and its subcommands(-city)
+	- Reads input and checks if proper command was inputed
+	- Uses switch statement to call selected command function
+**/
 func main() {
-	// Get commands
 	getCmd := flag.NewFlagSet("get", flag.ExitOnError)
 	getCityWeather := getCmd.String("city", "", "Desc: 'get city' will display inputted city")
 
-	// Add commands
 	addCmd := flag.NewFlagSet("add", flag.ExitOnError)
 	addCityWeather := addCmd.String("city", "", "Desc: 'add city' will store your city")
 
-	// Saved command
 	flag.NewFlagSet("saved", flag.ExitOnError)
 
-	// Checks to see if a subcommand was inputted
 	if len(os.Args) < 2 {
 		fmt.Println("expected 'get' or 'add' subcommands")
 		os.Exit(1)
@@ -41,8 +47,19 @@ func main() {
 	}
 }
 
+/**
+	Title:	HandleGet
+
+	Description: Function for "get" command, retrieves weather object given inputted city(string)
+
+	Features:
+	- Parses definitions that should not be in the argument list
+	- Checks if city inputted is valid
+	- If inputted city is not empty and a string, call getWeather and return information
+		- Create two variables which are sent into function call checkTemp
+		  these variables are then sent to be printed by pure function
+**/
 func HandleGet(getCmd *flag.FlagSet, cityweather *string) {
-	// Skips the first value(get), reads "-city"
 	getCmd.Parse(os.Args[2:])
 
 	if *cityweather == "" {
@@ -50,16 +67,28 @@ func HandleGet(getCmd *flag.FlagSet, cityweather *string) {
 		getCmd.PrintDefaults()
 		os.Exit(1)
 	}
-	// Pass string into function, add to API call cityweather
+
 	if *cityweather != "" {
-		// Extract Weather object as weatherObject
 		weatherObject := getWeather(*cityweather)
-		// Determines SIGO and paired note
 		var sigo, note = checkTemp(int(weatherObject.Current.TempF))
 		printWeather(weatherObject, sigo, note)
 	}
 }
 
+/**
+	Title:	HandleAdd
+
+	Description: Function for "add" command, stores inputted city(string) to txt file
+
+	Features:
+	- Parses definitions that should not be in the argument list
+	- Checks if city inputted is valid
+	- Reads "storedcity.txt" and checks if its not empty. If it has a city
+	  it will use Truncate() to remove the string. (This is prevent multiple
+	  cities being in the file)
+	- Calls WriteToFile() which stores the string in the file
+	- Prints that storing is complete
+**/
 func HandleAdd(addCmd *flag.FlagSet, cityweather *string) {
 	addCmd.Parse(os.Args[2:])
 
@@ -68,31 +97,36 @@ func HandleAdd(addCmd *flag.FlagSet, cityweather *string) {
 		addCmd.PrintDefaults()
 		os.Exit(1)
 	}
-	// Stores string from file in variable
 	fileReadCity, fileErr := os.ReadFile("store/storedcity.txt")
 	if fileErr != nil {
 		log.Fatal(fileErr)
 	}
-	// Check if file is not empty, if it has content then wipe it
 	if string(fileReadCity) != "" {
 		if err := os.Truncate("store/storedcity.txt", 0); err != nil {
 			log.Printf("Failed to truncate: %v\n", err)
 		}
 	}
-	// Calls write function to store new location
 	WriteToFile(addCmd, cityweather)
 	fmt.Printf("\n%v was stored as your saved city\n\n", *cityweather)
 }
 
+/**
+	Title:	HandleSaved
+
+	Description: Function for "saved" command, returns saved city information to user
+
+	Features:
+	- Reads "storedcity.txt"
+	- Create string object of text(the city) in the file
+	- Checks if string is not empty, and calls getWeather() and checkTemp(0)
+**/
 func HandleSaved() {
 	fileReadCity, fileErr := os.ReadFile("store/storedcity.txt")
 	if fileErr != nil {
 		log.Fatal(fileErr)
 	}
-	// Stores city name/zip
 	zipweather := string(fileReadCity)
 
-	// Check if inputted string is not null
 	if zipweather != "" {
 		weatherObject := getWeather(zipweather)
 		var sigo, note = checkTemp(int(weatherObject.Current.TempF))
