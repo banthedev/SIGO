@@ -37,11 +37,11 @@ And that's it for the setup, now you roam free and explore
 
 ## Building using Docker
 In the root directory of the project do the following
-```docker
-docker build --target dev . -t go
-docker run -it -v ${PWD}:/sigo go sh
+```bash
+make docker-dev
 ```
-You will now find yourself in a containerized development environment where you can code freely without installing Go on your system.
+You will now find yourself in a isolated containerized development environment where you can code freely without installing Go on your system. This container process is seperate from your own filesystem.
+
 Now check to see if Go has been installed correctly 
 ```go
 go version
