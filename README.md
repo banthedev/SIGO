@@ -59,17 +59,23 @@ In order to use the SIGO CLI you must move into the src folder `cd src`. There y
 | add     | stores inputted city into local-save        | ./sigo add -city Austin     |
 | saved   | displays stored city |  ./sigo saved |
 
-**get:** \
-`./sigo get -city <cityname or zipcode>`
+**get:**
+```
+./sigo get -city <cityname or zipcode>
+```
 - Requires the `-city` flag 
 
-**add:** \
-`./sigo add -city <cityname or zipcode>`
+**add:** 
+```
+./sigo add -city <cityname or zipcode>
+```
 - Requires the `-city` flag 
 - Its recommended to use your zipcode for better accuracy since multiple countries have similar city names
 
-**saved**: \
-`./sigo saved`
+**saved**:
+```
+./sigo saved
+```
 - Requires no flags!!!
 
 (**Note:** Currently only zipcodes from USA, Canda, and UK work!)
