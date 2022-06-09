@@ -3,3 +3,5 @@ docker-build:
 docker-dev:
 	docker build --target dev . -t go
 	docker run -it -v ${PWD}:/sigo go sh
+clear-file:
+	: > store/storedcity.txt
