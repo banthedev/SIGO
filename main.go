@@ -70,7 +70,7 @@ func HandleGet(getCmd *flag.FlagSet, cityweather *string) {
 
 	if *cityweather != "" {
 		weatherObject := getWeather(*cityweather)
-		var sigo, note = checkTemp(int(weatherObject.Current.TempF))
+		var sigo, note = checkTemp(weatherObject)
 		printWeather(weatherObject, sigo, note)
 	}
 }
@@ -129,8 +129,8 @@ func HandleSaved() {
 
 	if zipweather != "" {
 		weatherObject := getWeather(zipweather)
-		var sigo, note = checkTemp(int(weatherObject.Current.TempF))
-
+		// var sigo, note = checkTemp(int(weatherObject.Current.TempF))
+		var sigo, note = checkTemp(weatherObject)
 		printWeather(weatherObject, sigo, note)
 	}
 }

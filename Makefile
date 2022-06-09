@@ -5,3 +5,6 @@ docker-dev:
 	docker run -it -v ${PWD}:/sigo go sh
 clear-file:
 	: > store/storedcity.txt
+test-get:
+	go build
+	./sigo get -city Boston
